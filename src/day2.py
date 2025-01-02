@@ -20,13 +20,14 @@ for y, x in rng.integers(10, SIZE - 10, size=(100, 2)):
     )
     grid[circle_mask] = rng.random()
 
-# Visualise colours
+# Offset colours
 offset = 10
 grid_red = grid.copy()
 grid_green = np.roll(np.roll(grid.copy(), offset, axis=0), offset, axis=1)
 grid_blue = np.roll(np.roll(grid.copy(), -offset, axis=0), -offset, axis=1)
 grid = rearrange([grid_red, grid_green, grid_blue], "b h w -> h w b")
 
+# Apply copies of top-left wuarter to other quarter
 mid = SIZE // 2
 quart = SIZE // 4
 corner = grid[:mid, :mid]
@@ -34,17 +35,21 @@ grid[:mid, mid:] *= 1 / corner
 grid[mid:, :mid] *= corner
 grid[mid:, mid:] *= 1 / corner
 
+# Spin concentric squaures from outside-in
 shade_size = 5
 for inset in np.linspace(0, 0.5, 15):
     dist = int(inset * SIZE)
     back_dist = SIZE - dist
-    new_section = np.rot90(grid[dist:back_dist, dist:back_dist].copy())
+    rotated_section = np.rot90(grid[dist:back_dist, dist:back_dist].copy())
+    # Apply a darkening just wider than the patch, to give a shadow
     grid[
         (dist - 1) : (back_dist + shade_size),
         (dist - 1) : (back_dist + shade_size),
     ] *= 0.8
-    grid[dist:back_dist, dist:back_dist] = new_section
+    # Pare the rotated section
+    grid[dist:back_dist, dist:back_dist] = rotated_section
 
+# Show and save
 fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 ax.imshow(grid, cmap="gray")
 ax.set_xticks([])
