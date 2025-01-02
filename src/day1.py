@@ -12,17 +12,17 @@ def add_lines(
     num_lines: int,
     rng_obj: np.random.Generator,
 ):
-    for y_pos in rng.integers(0, SIZE, size=num_lines):
-        thickness = max(rng.integers(*width_range, size=1)[0] // 2, 1)
-        start_pos, length = rng.integers(1, SIZE, size=2)
+    for y_pos in rng_obj.integers(0, SIZE, size=num_lines):
+        thickness = max(rng_obj.integers(*width_range, size=1)[0] // 2, 1)
+        start_pos, length = rng_obj.integers(1, SIZE, size=2)
         array[(y_pos - thickness) : (y_pos), start_pos : (start_pos + length)] = (
-            rng.random()
+            rng_obj.random()
         )
-    for x_pos in rng.integers(0, SIZE, size=num_lines):
-        thickness = max(rng.integers(*width_range, size=1)[0] // 2, 1)
-        start_pos, length = rng.integers(1, SIZE, size=2)
+    for x_pos in rng_obj.integers(0, SIZE, size=num_lines):
+        thickness = max(rng_obj.integers(*width_range, size=1)[0] // 2, 1)
+        start_pos, length = rng_obj.integers(1, SIZE, size=2)
         array[start_pos : (start_pos + length), (x_pos - thickness) : (x_pos)] = (
-            rng.random()
+            rng_obj.random()
         )
     return array
 
@@ -43,27 +43,30 @@ def repeat_channels(array: np.array, offset: int = 100):
     return array
 
 
+def draw_images(subplot_shape: Tuple[int, int], image_func, rng_obj, save_name: str):
+    fig, axs = plt.subplots(*subplot_shape, figsize=(10, 10), squeeze=False)
+    for ax in axs.flatten():
+        ax.imshow(image_func(rng_obj), cmap="gray")
+        ax.set_xticks([])
+        ax.set_yticks([])
+    plt.savefig(save_name)
+    plt.show()
+
+
 SIZE = 500
 
-rng = np.random.default_rng(1701)
-fig, axs = plt.subplots(1, 1, figsize=(10, 10), squeeze=False)
-for ax in axs.flatten():
-    axis_rng = np.random.default_rng(rng.integers(1, 1e6, size=1)[0])
-    image = generate_gray_image(axis_rng)
-    ax.imshow(image, cmap="gray")
-    ax.set_xticks([])
-    ax.set_yticks([])
-plt.savefig("out/day1.png")
-plt.show()
+# Grayscale lines
+draw_images(
+    (1, 1),
+    generate_gray_image,
+    np.random.default_rng(1701),
+    "out/day1.png",
+)
 
-rng = np.random.default_rng(1701)
-fig, axs = plt.subplots(1, 1, figsize=(10, 10), squeeze=False)
-for ax in axs.flatten():
-    axis_rng = np.random.default_rng(rng.integers(1, 1e6, size=1)[0])
-    image = generate_gray_image(axis_rng)
-    image = repeat_channels(image, offset=5)
-    ax.imshow(image, cmap="gray")
-    ax.set_xticks([])
-    ax.set_yticks([])
-plt.savefig("out/day1_chrom.png")
-plt.show()
+# Grayscale lines with chromatic shift
+draw_images(
+    (1, 1),
+    lambda r: repeat_channels(generate_gray_image(r), offset=5),
+    np.random.default_rng(1701),
+    "out/day1_chrom.png",
+)
