@@ -49,7 +49,7 @@ def draw_images(subplot_shape: Tuple[int, int], image_func, rng_obj, save_name: 
         ax.imshow(image_func(rng_obj), cmap="gray")
         ax.set_xticks([])
         ax.set_yticks([])
-    plt.savefig(save_name)
+    plt.savefig(save_name, bbox_inches="tight")
     plt.show()
 
 
