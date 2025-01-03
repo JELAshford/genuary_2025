@@ -17,13 +17,14 @@ SIZE = 1000
 NUM_CIRCLES = 100
 OFFSET = 20
 rng = np.random.default_rng(1701)
+half_size = SIZE // 2
 
 # Create a centred distance grid
 y, x = np.indices((SIZE, SIZE))
-y, x = y - SIZE // 2, x - SIZE // 2
+y, x = y - half_size, x - half_size
 
 # Draw circles at and offset from start pos
-centres = rng.integers(-SIZE // 2, SIZE // 2, size=(NUM_CIRCLES, 2))
+centres = rng.integers(-half_size, half_size, size=(NUM_CIRCLES, 2))
 radii = rng.integers(20, 100, size=NUM_CIRCLES).astype(float)
 r_grid = draw_circles(y, x, centres, radii)
 b_grid = draw_circles(y, x, centres + OFFSET, radii * 0.9)
