@@ -9,7 +9,9 @@ dependencies = [
     "ipykernel>=6.29.5",
     "matplotlib>=3.10.0",
     "numpy<2",
+    "requests>=2.32.3",
     "scikit-image>=0.25.0",
     "scipy>=1.14.1",
     "shapely>=2.0.6",
+    "sty>=1.0.6",
 ]
