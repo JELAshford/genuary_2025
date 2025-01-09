@@ -155,8 +155,8 @@ def plot_evolution(
 
         # Formatting
         ax.set_facecolor(colors["background"])
-        ax.set_xlim(-4, 4)
-        ax.set_ylim(-4, 4)
+        ax.set_xlim(-10, 10)
+        ax.set_ylim(-10, 10)
         ax.set_aspect("equal")
         ax.set_xticks([])
         ax.set_yticks([])
