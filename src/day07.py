@@ -89,4 +89,4 @@ for ind, lum_patch in enumerate(lum_patches):
 final_draw = Image.new("RGB", img.size, 0)
 draw_obj = ImageDraw.Draw(final_draw)
 draw_obj.multiline_text((0, 0), image, font=out_font)
-final_draw.save("out/day7.png", "PNG")
+final_draw.save("out/day07.png", "PNG")

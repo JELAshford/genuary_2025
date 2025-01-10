@@ -145,5 +145,5 @@ for ax in axs.flatten():
     ax.set_xticks([])
     ax.set_yticks([])
 plt.tight_layout()
-plt.savefig("out/day6.png", bbox_inches="tight")
+plt.savefig("out/day06.png", bbox_inches="tight")
 plt.show()

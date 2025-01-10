@@ -60,7 +60,7 @@ draw_images(
     (1, 1),
     generate_gray_image,
     np.random.default_rng(1701),
-    "out/day1.png",
+    "out/day01.png",
 )
 
 # Grayscale lines with chromatic shift

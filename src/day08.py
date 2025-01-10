@@ -177,5 +177,5 @@ if __name__ == "__main__":
         key, x0, num_steps=1000, scaling=4, noise=noise
     )
     fig = plot_evolution(trace, x0_trace, fitnesses, timesteps=[1000])
-    plt.savefig("out/day8.png", dpi=300, bbox_inches="tight")
+    plt.savefig("out/day08.png", dpi=300, bbox_inches="tight")
     plt.close()
