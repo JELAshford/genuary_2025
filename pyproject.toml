@@ -6,13 +6,18 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "einops>=0.8.0",
+    "flax>=0.10.2",
+    "iprogress>=0.4",
     "ipykernel>=6.29.5",
     "jax>=0.4.38",
     "matplotlib>=3.10.0",
     "numpy<2",
+    "optax>=0.2.4",
     "requests>=2.32.3",
     "scikit-image>=0.25.0",
     "scipy>=1.14.1",
     "shapely>=2.0.6",
     "sty>=1.0.6",
+    "tqdm>=4.67.1",
+    "transformers>=4.48.0",
 ]
