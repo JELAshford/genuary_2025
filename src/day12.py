@@ -1,12 +1,22 @@
 """Subdivision"""
 
 from skimage.draw import line, rectangle
+from dataclasses import dataclass
 import matplotlib.pylab as plt
 from collections import deque
 import numpy as np
 
 SIZE = 1000
-SUBDIV_LEVEL = 8
+SUBDIV_LEVEL = 9
+
+
+@dataclass
+class Rect:
+    x: int
+    y: int
+    width: int
+    height: int
+    level: int
 
 
 def create_pattern(rng_obj):
@@ -15,59 +25,53 @@ def create_pattern(rng_obj):
 
     background = np.zeros(shape=(SIZE, SIZE))
     foreground = np.zeros(shape=(SIZE, SIZE))
-    rects = deque([(((0, 0), SIZE - 1, SIZE - 1), 0)])
+    rects = deque([Rect(0, 0, SIZE - 1, SIZE - 1, 0)])
     while rects:
-        this_rect, this_level = rects.popleft()
-        ((this_y, this_x), this_height, this_width) = this_rect
-        if this_level > SUBDIV_LEVEL:
+        rect = rects.popleft()
+        if rect.level > SUBDIV_LEVEL:
             continue
         # Randomly fill some
-        if this_level > 3 and rng.random() > 0.9:
-            yy, xx = rectangle((this_y, this_x), extent=(this_height, this_width))
+        if rect.level > 3 and rng.random() > 0.9:
+            yy, xx = rectangle((rect.y, rect.x), extent=(rect.height, rect.width))
             background[yy, xx] = rng.random()
-
         # Split at a random point in a random orientation
         split_frac = rng.random()
         if rng.random() > 0.5:  # Vertical
-            mid_x = lerp(this_x, this_x + this_width, split_frac)
-            # Draw line
-            yy, xx = line(this_y, mid_x, this_y + this_height, mid_x)
-            foreground[yy, xx] = 1.0
+            mid_x = lerp(rect.x, rect.x + rect.width, split_frac)
+            # Line data
+            yy, xx = line(rect.y, mid_x, rect.y + rect.height, mid_x)
             # Append new rects
-            first_width = int(this_width * split_frac)
-            rects.append((((this_y, this_x), this_height, first_width), this_level + 1))
-            rects.append(
-                (
-                    (
-                        (this_y, this_x + first_width),
-                        this_height,
-                        this_width - first_width,
-                    ),
-                    this_level + 1,
-                )
+            first_width = int(rect.width * split_frac)
+            r1 = Rect(rect.x, rect.y, first_width, rect.height, rect.level + 1)
+            r2 = Rect(
+                rect.x + first_width,
+                rect.y,
+                rect.width - first_width,
+                rect.height,
+                rect.level + 1,
             )
         else:  # Horizontal
-            mid_y = lerp(this_y, this_y + this_height, split_frac)
-            # Draw line
-            yy, xx = line(mid_y, this_x, mid_y, this_x + this_width)
-            foreground[yy, xx] = 1.0
+            mid_y = lerp(rect.y, rect.y + rect.height, split_frac)
+            # Line data
+            yy, xx = line(mid_y, rect.x, mid_y, rect.x + rect.width)
             # Append new rects
-            first_height = int(this_height * split_frac)
-            rects.append((((this_y, this_x), first_height, this_width), this_level + 1))
-            rects.append(
-                (
-                    (
-                        (this_y + first_height, this_x),
-                        this_height - first_height,
-                        this_width,
-                    ),
-                    this_level + 1,
-                )
+            first_height = int(rect.height * split_frac)
+            r1 = Rect(rect.x, rect.y, rect.width, first_height, rect.level + 1)
+            r2 = Rect(
+                rect.x,
+                rect.y + first_height,
+                rect.width,
+                rect.height - first_height,
+                rect.level + 1,
             )
+        foreground[yy, xx] = 1.0
+        rects.append(r1)
+        rects.append(r2)
+
     return background + foreground
 
 
-rng = np.random.default_rng(2)
+rng = np.random.default_rng(3)
 fig, axs = plt.subplots(3, 3, figsize=(10, 10), squeeze=False)
 for ax in axs.flatten():
     ax.imshow(create_pattern(rng), cmap="gray")
