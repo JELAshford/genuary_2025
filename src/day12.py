@@ -28,6 +28,7 @@ def create_pattern(rng_obj):
     rects = deque([Rect(0, 0, SIZE - 1, SIZE - 1, 0)])
     while rects:
         rect = rects.popleft()
+        nlevel = rect.level + 1
         if rect.level > SUBDIV_LEVEL:
             continue
         # Randomly fill some
@@ -41,29 +42,18 @@ def create_pattern(rng_obj):
             # Line data
             yy, xx = line(rect.y, mid_x, rect.y + rect.height, mid_x)
             # Append new rects
-            first_width = int(rect.width * split_frac)
-            r1 = Rect(rect.x, rect.y, first_width, rect.height, rect.level + 1)
-            r2 = Rect(
-                rect.x + first_width,
-                rect.y,
-                rect.width - first_width,
-                rect.height,
-                rect.level + 1,
-            )
+            nw = int(rect.width * split_frac)
+            r1 = Rect(rect.x, rect.y, nw, rect.height, nlevel)
+            r2 = Rect(rect.x + nw, rect.y, rect.width - nw, rect.height, nlevel)
         else:  # Horizontal
             mid_y = lerp(rect.y, rect.y + rect.height, split_frac)
             # Line data
             yy, xx = line(mid_y, rect.x, mid_y, rect.x + rect.width)
             # Append new rects
-            first_height = int(rect.height * split_frac)
-            r1 = Rect(rect.x, rect.y, rect.width, first_height, rect.level + 1)
-            r2 = Rect(
-                rect.x,
-                rect.y + first_height,
-                rect.width,
-                rect.height - first_height,
-                rect.level + 1,
-            )
+            nh = int(rect.height * split_frac)
+            r1 = Rect(rect.x, rect.y, rect.width, nh, nlevel)
+            r2 = Rect(rect.x, rect.y + nh, rect.width, rect.height - nh, nlevel)
+        # Draw and store
         foreground[yy, xx] = 1.0
         rects.append(r1)
         rects.append(r2)
