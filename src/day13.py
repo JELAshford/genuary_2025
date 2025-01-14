@@ -20,7 +20,7 @@ def create_pattern(rng_obj):
     def angle_to_vec(radians: float):
         return np.array([np.cos(radians), np.sin(radians)])
 
-    # Setup boids
+    # Setup triangles
     positions = rng_obj.random(size=(NUM_BOIDS, 2))
     bearings = rng_obj.random(size=(NUM_BOIDS)) * 2 * np.pi
 
@@ -31,7 +31,7 @@ def create_pattern(rng_obj):
         directions = angle_to_vec(bearings) * 0.01
         positions += directions.T
 
-        # Draw boids
+        # Draw triangles
         int_pos = (positions * SIZE).astype(int)
         for pos, bearing in zip(int_pos, bearings):
             fwd = angle_to_vec(bearing)
