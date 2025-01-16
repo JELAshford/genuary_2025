@@ -15,6 +15,7 @@ dependencies = [
     "optax>=0.2.4",
     "requests>=2.32.3",
     "scikit-image>=0.25.0",
+    "scikit-learn>=1.6.1",
     "scipy>=1.14.1",
     "shapely>=2.0.6",
     "sty>=1.0.6",
