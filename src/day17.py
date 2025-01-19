@@ -1,8 +1,7 @@
 """What if PI=4"""
 
 import matplotlib.pylab as plt
-from skimage.draw import line_aa, line
-from einops import rearrange
+from skimage.draw import line_aa
 import numpy as np
 
 SIZE = 2000
