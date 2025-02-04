@@ -13,6 +13,7 @@ dependencies = [
     "matplotlib>=3.10.0",
     "numpy<2",
     "optax>=0.2.4",
+    "perlin-numpy",
     "py2bit",
     "pyranges>=0.1.2",
     "requests>=2.32.3",
@@ -27,3 +28,4 @@ dependencies = [
 
 [tool.uv.sources]
 py2bit = { git = "https://github.com/dpryan79/py2bit" }
+perlin-numpy = { git = "https://github.com/pvigier/perlin-numpy" }
